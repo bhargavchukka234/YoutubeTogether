@@ -59,4 +59,13 @@ public class EventController {
 			this.template.convertAndSend("/topic/" + room, event);
 		}
 	}
+
+	@MessageMapping("/youtube/timing_event")
+	public void timingEvent(TimingEvent event) throws Exception {
+		System.out.println("current client is " + event.clientID);
+		System.out.println("current room is " + event.getRoomName());
+		System.out.println("timing is " + event.currTimeInSecs);
+
+		// persist timing info to redis
+	}
 }
