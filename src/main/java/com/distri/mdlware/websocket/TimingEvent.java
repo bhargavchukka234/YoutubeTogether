@@ -4,7 +4,8 @@ public class TimingEvent {
 
 	public String clientID;
 	public String roomName;
-	public String currTimeInSecs;
+	public String streamPosition;
+	public String positionSnapshotTime;
 
 	public String getClientID() {
 		return clientID;
@@ -22,12 +23,19 @@ public class TimingEvent {
 		this.roomName = roomName;
 	}
 
-	public String getCurrTimeInSecs() {
-		return currTimeInSecs;
+	public String getStreamPosition() {
+		return streamPosition;
 	}
 
-	public void setCurrTimeInSecs(String currTimeInSecs) {
-		this.currTimeInSecs = currTimeInSecs;
+	public void setStreamPosition(String streamPosition) {
+		this.streamPosition = streamPosition;
 	}
 
+	public String getPositionSnapshotTime() {
+		return positionSnapshotTime;
+	}
+
+	public void setPositionSnapshotTime(String positionSnapshotTime) {
+		this.positionSnapshotTime = positionSnapshotTime;
+	}
 }
