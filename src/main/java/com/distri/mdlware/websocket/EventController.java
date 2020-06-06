@@ -12,6 +12,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import uci.middleware.project.dao.ClientDAO;
 import uci.middleware.project.dao.RoomDAO;
+import uci.middleware.project.dto.RoomClient;
 
 import static uci.middleware.project.utils.Constants.VIDEO_STATUS;
 import static uci.middleware.project.utils.Constants.VIDEO_URL;
@@ -83,4 +84,14 @@ public class EventController {
         String jsonString = jsonMapper.writeValueAsString(new RedisPubSubDTO("", room, event));
         redisTemplate.convertAndSend(channelTopic.getTopic(), jsonString);
     }
+
+	@MessageMapping("/youtube/timing_event")
+	public void timingEvent(TimingEvent event) throws Exception {
+		System.out.println("current client is " + event.clientID);
+		System.out.println("current room is " + event.getRoomName());
+		System.out.println("timing is " + event.getStreamPosition());
+        System.out.println("timing taken at " + event.getPositionSnapshotTime());
+
+		clientDAO.updateRoomClient(event.roomName, event.clientID, new RoomClient(Float.parseFloat(event.streamPosition), Long.parseLong(event.positionSnapshotTime)));
+	}
 }

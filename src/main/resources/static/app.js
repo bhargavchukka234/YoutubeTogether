@@ -22,13 +22,19 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
+
+
 function joinRoom(room) {
+    //client makes http POST request to the sync manager to register the room and receives the unique client ID in the same call
+    //If the room already exists, client should be added to the existing room in the redis
+    //else new room should be created and this client should be added to the room 
     curr_room = room
-    var socket = new SockJS('/gs-guide-websocket');
+    var socket = new SockJS('/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
-        console.log('Connected: ' + frame);
+        console.log('Connected: ' + frame)
+
         stompClient.subscribe('/topic/' + room, function (greeting) {
             if (ours == false) {
                 console.log("Message received to room: " + room)
@@ -47,7 +53,15 @@ function joinRoom(room) {
             ours = false;
         });
     });
+    var interval = setInterval(function () {
+        var temp = player.getCurrentTime()
+        stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+            'clientID': 'randomID', 'roomName': curr_room, 'streamPosition': temp,
+            'positionSnapshotTime' : Date.now()
+        }, 50000))
+    })
 }
+
 
 function onPlayerStateChange(event) {
     // console.log(event);
