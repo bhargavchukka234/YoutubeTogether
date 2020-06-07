@@ -56,7 +56,8 @@ function joinRoom(room) {
     var interval = setInterval(function () {
         var temp = player.getCurrentTime()
         stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-            'clientID': 'randomID', 'roomName': curr_room, 'currTimeInSecs': temp
+            'clientID': 'randomID', 'roomName': curr_room, 'streamPosition': temp,
+            'positionSnapshotTime' : Date.now()
         }, 50000))
     })
 }

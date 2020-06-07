@@ -1,4 +1,9 @@
-/home/apoorva/Documents/Courses/Spring-2020/Distri Middleware/Project/movicast/src/main/java/com/distri/mdlware/websocket/EventController.java
-/home/apoorva/Documents/Courses/Spring-2020/Distri Middleware/Project/movicast/src/main/java/com/distri/mdlware/websocket/WebSocketApplication.java
-/home/apoorva/Documents/Courses/Spring-2020/Distri Middleware/Project/movicast/src/main/java/com/distri/mdlware/websocket/Event.java
-/home/apoorva/Documents/Courses/Spring-2020/Distri Middleware/Project/movicast/src/main/java/com/distri/mdlware/websocket/WebSocketConfig.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/dto/NewClientDTO.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/redis/pubsub/RedisPubSubConfig.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/EventController.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/redis/RedisDAO.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/redis/pubsub/RedisMessageListener.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/service/VirtualRoomService.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/Event.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/Application.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/WebSocketConfig.java
