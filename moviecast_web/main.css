@@ -1,0 +1,13 @@
+#player {
+    float: left;
+    min-width: 350px;
+    width: 45%;
+    text-align: center;
+}
+#video-chat {
+    float: left;
+    min-width: 350px;
+}
+video {
+    width: 100%;
+}
