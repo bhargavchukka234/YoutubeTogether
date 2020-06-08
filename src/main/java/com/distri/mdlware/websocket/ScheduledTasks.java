@@ -29,11 +29,11 @@ public class ScheduledTasks {
     @Qualifier("brokerMessagingTemplate")
     private SimpMessagingTemplate simpMessagingTemplate;
 
-    public static final int ROOM_IDEAL_POSITION_UPDATE_TIMEOUT_SECONDS = 60;
+    public static final int ROOM_IDEAL_POSITION_UPDATE_TIMEOUT_SECONDS = 20;
 
     public static final String IDEAL_POSITION= "idealPosition";
 
-    @Scheduled(fixedRate = 30000)
+    @Scheduled(fixedRate = 10000)
     public void scheduleTaskWithFixedRate() {
         // implement the logic to fetch timing data of each client of each room from
         // redis
@@ -56,20 +56,23 @@ public class ScheduledTasks {
                 //compute room ideal position
                 syncManager.addRoomToSyncManager(roomName);
                 syncManager.computeSyncPosition(roomName, room);
+                room = roomDAO.getRoomInformation(entry.getKey());
             }
-            if (room.getVideoPositionUpdateTimestamp() != null) {
+            else if (room.getVideoPositionUpdateTimestamp() != null) {
 
                 if (room.getVideoPositionUpdateTimestamp() < System.currentTimeMillis() - ROOM_IDEAL_POSITION_UPDATE_TIMEOUT_SECONDS * 1000) {
 
                     //compute room ideal position
                     syncManager.addRoomToSyncManager(roomName);
                     syncManager.computeSyncPosition(roomName, room);
+                    room = roomDAO.getRoomInformation(entry.getKey());
                 }
             }
             if (room.getVideoStatus() != null && room.getVideoStatus().equals("play")) {
-                if (room.getVideoPositionUpdateTimestamp() > room.getVideoStatusUpdateTimestamp()) {
+                if (room.getVideoPositionUpdateTimestamp() < room.getVideoStatusUpdateTimestamp()) {
 
                     syncManager.computeSyncPosition(roomName, room);
+                    room = roomDAO.getRoomInformation(entry.getKey());
                 }
                 sendRoomClientsSyncPosition(entry.getKey(), room);
             }
@@ -78,6 +81,7 @@ public class ScheduledTasks {
 
     private void sendRoomClientsSyncPosition(String roomName, Room room) {
 
+        System.out.println("Sending ideal position for room : " + roomName + " is " + room.getVideoPosition());
         simpMessagingTemplate.convertAndSend("/topic/" + roomName, new IdealPosition(IDEAL_POSITION, room.getVideoPosition(), room.getVideoPositionUpdateTimestamp()));
     }
 

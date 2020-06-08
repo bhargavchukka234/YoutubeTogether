@@ -29,7 +29,7 @@ public class AppConfig {
     //redis pubsub initialization
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 7000);
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration("localhost", 7001);
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory(redisStandaloneConfiguration);
         return jedisConnectionFactory;
     }
@@ -69,7 +69,7 @@ public class AppConfig {
     @Bean
     Redis redis() {
 
-        return new Redis("localhost", 7000);
+        return new Redis("localhost", 7001);
     }
 
     @Bean(name = "roomDAO")

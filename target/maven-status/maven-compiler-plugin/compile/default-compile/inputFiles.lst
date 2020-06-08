@@ -2,7 +2,6 @@
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/Event.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/sync/SyncManager.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/Application.java
-/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/ReconnectEvent.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/WebSocketConfig.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/TimingEvent.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/IdealPosition.java

@@ -2,21 +2,22 @@ package com.distri.mdlware.websocket;
 
 public class IdealPosition {
 
-    private String eventName;
+    private String name;
     private Float videoPosition;
     private Long videoPositionUpdateTimestamp;
 
-    public IdealPosition(String eventName, Float videoPosition, Long videoPositionUpdateTimestamp){
+    public IdealPosition(String name, Float videoPosition, Long videoPositionUpdateTimestamp){
+        this.name = name;
         this.videoPosition = videoPosition;
          this.videoPositionUpdateTimestamp = videoPositionUpdateTimestamp;
     }
 
-    public String getEventName() {
-        return eventName;
+    public String getName() {
+        return name;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Float getVideoPosition() {
@@ -35,5 +36,12 @@ public class IdealPosition {
         this.videoPositionUpdateTimestamp = videoPositionUpdateTimestamp;
     }
 
-
+    @Override
+    public String toString() {
+        return "IdealPosition{" +
+                "eventName='" + name + '\'' +
+                ", videoPosition=" + videoPosition +
+                ", videoPositionUpdateTimestamp=" + videoPositionUpdateTimestamp +
+                '}';
+    }
 }

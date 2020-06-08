@@ -114,7 +114,7 @@ public class SyncManager {
 
             RoomClient roomClient = roomClients.get(entry.getKey());
             Integer consecutiveSlowClientCount = roomClient.getConsecutiveSlowClientCount();
-            if(entry.getValue() < idealPosition && entry.getValue().equals(slowestClientPosition)){
+            if(entry.getValue() != null && entry.getValue() < idealPosition && entry.getValue().equals(slowestClientPosition)){
 
                if(consecutiveSlowClientCount == null){
                    consecutiveSlowClientCount = 1;

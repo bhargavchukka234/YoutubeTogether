@@ -1,7 +1,6 @@
 com/distri/mdlware/websocket/WebSocketConfig.class
 com/distri/mdlware/dto/NewClientDTO.class
 com/distri/mdlware/websocket/ScheduledTasks.class
-com/distri/mdlware/websocket/ReconnectEvent.class
 com/distri/mdlware/websocket/EventController.class
 com/distri/mdlware/Application.class
 com/distri/mdlware/websocket/Event.class
