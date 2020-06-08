@@ -33,8 +33,9 @@ public class ScheduledTasks {
 
     public static final String IDEAL_POSITION= "idealPosition";
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(cron = "0/10 * * * * *")
     public void scheduleTaskWithFixedRate() {
+        System.out.println("schedule called at : " + System.currentTimeMillis());
         // implement the logic to fetch timing data of each client of each room from
         // redis
         // calculate the ideal time for each room

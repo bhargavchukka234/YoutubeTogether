@@ -103,7 +103,7 @@ function joinRoom(room) {
             'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
             'positionSnapshotTime': Date.now()
         }))
-    }, 60000)
+    }, 10000)
 }
 
 
