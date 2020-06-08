@@ -9,7 +9,7 @@ firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var curr_room = ""
 // This function creates an <iframe> (and YouTube player) after the API code downloads.
 var player;
-var vidId = "_ZtVOce2_98";  // The youtube Video ID for your starting video - dQw4w9WgXcQ
+var vidId = "xHcPhdZBngw";  // The youtube Video ID for your starting video - dQw4w9WgXcQ
 var ours = false;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -21,7 +21,7 @@ function onYouTubeIframeAPIReady() {
         }
     });
 }
-
+var vis = false;
 
 function joinRoom(room) {
     //client makes http POST request to the sync manager to register the room and receives the unique client ID in the same call
@@ -41,31 +41,17 @@ function joinRoom(room) {
                 //get room information and start video from received ideal position
             });
 
-        // const userAction = async () => {
-        //     const response = await fetch('create/room/' + curr_room, {
-        //         method: 'POST',
-        //         // body: myBody, // string or object
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         }
-        //     });
-        //     const myJson = await response.json(); //extract JSON from the http response
-        //     // do something with myJson
-        // }
-
-        // userAction()
-
         setConnected(true);
         console.log('Connected: ' + frame)
 
         stompClient.subscribe('/topic/' + room, function (greeting) {
             if (ours == false) {
+                vis = true
                 console.log("Message received to room: " + room)
                 event = JSON.parse(greeting.body)
                 if (event.name == "play") {
-                    let temp = player.getCurrentTime()
                     stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-                        'clientID': clientID, 'roomName': curr_room, 'streamPosition': temp,
+                        'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
                         'positionSnapshotTime': Date.now()
                     }))
                     player.playVideo();
@@ -82,8 +68,10 @@ function joinRoom(room) {
                 else {
                     player.cueVideoById(event.value, 0, "large");
                 }
+            } else {
+                ours = false
+
             }
-            ours = false;
         });
     });
     var interval = setInterval(function () {
@@ -91,30 +79,34 @@ function joinRoom(room) {
         stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
             'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
             'positionSnapshotTime': Date.now()
-        }, 60000))
-    }, 10000)
+        }))
+    }, 60000)
 }
 
 
 function onPlayerStateChange(event) {
-    // console.log(event);
     console.log("Client ID is " + clientID)
-    ours = true
-    switch (event.data) {
-        case YT.PlayerState.PLAYING:
-            sendEvent("play", '')
-            break;
-        case YT.PlayerState.PAUSED:
-            sendEvent("pause", '')
-            break;
-        case YT.PlayerState.BUFFERING: // If they seeked, dont send this.
-            sendEvent("buffering", event.target.playerInfo.currentTime)
+
+    if (vis == false) {
+        ours = true
+        switch (event.data) {
+            case YT.PlayerState.PLAYING:
+                sendEvent("play", '')
+                break;
+            case YT.PlayerState.PAUSED:
+                sendEvent("pause", '')
+                break;
+            case YT.PlayerState.BUFFERING: // If they seeked, dont send this.
+                sendEvent("buffering", event.target.playerInfo.currentTime)
+        }
+    } else {
+        ours = false;
+        vis = false
     }
 }
 
 function cueVideoFromURL(url) {
     if (!url) return alert("Enter a valid YouTube URL");
-    //var url = form.url.value;
     var video_id = url.split('v=')[1];
     var ampersandPosition = video_id.indexOf('&');
     if (ampersandPosition != -1) {
