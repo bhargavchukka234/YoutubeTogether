@@ -1,12 +1,3 @@
-{/* <script type="module">
-
-    import $ from "jquery";
-    import SockJS from "sockjs-client"
-    import Stomp from "@stomp/stompjs"
-    import 'bootstrap/dist/css/bootstrap.min.css';
-
-    import btn from './helper'
-</script> */}
 var stompClient = null;
 var clientID = ''
 
@@ -19,7 +10,6 @@ var curr_room = ""
 // This function creates an <iframe> (and YouTube player) after the API code downloads.
 var player;
 var vidId = "_ZtVOce2_98";  // The youtube Video ID for your starting video - dQw4w9WgXcQ
-//var seek = true
 var ours = false;
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
@@ -72,6 +62,11 @@ function joinRoom(room) {
                 console.log("Message received to room: " + room)
                 event = JSON.parse(greeting.body)
                 if (event.name == "play") {
+                    let temp = player.getCurrentTime()
+                    stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+                        'clientID': clientID, 'roomName': curr_room, 'streamPosition': temp,
+                        'positionSnapshotTime': Date.now()
+                    }))
                     player.playVideo();
                 }
                 else if (event.name == "pause") {
@@ -89,7 +84,7 @@ function joinRoom(room) {
         });
     });
     // var interval = setInterval(function () {
-    //     var temp = player.getCurrentTime()
+    //     let temp = player.getCurrentTime()
     //     stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
     //         'clientID': clientID, 'roomName': curr_room, 'streamPosition': temp,
     //         'positionSnapshotTime': Date.now()
@@ -110,7 +105,6 @@ function onPlayerStateChange(event) {
             sendEvent("pause", '')
             break;
         case YT.PlayerState.BUFFERING: // If they seeked, dont send this.
-            seek = false;
             sendEvent("buffering", event.target.playerInfo.currentTime)
     }
 }
@@ -124,6 +118,7 @@ function cueVideoFromURL(url) {
         video_id = video_id.substring(0, ampersandPosition);
     }
     player.cueVideoById(video_id, 0, "large");
+    ours = true
     sendEvent("cue", video_id)
 }
 
