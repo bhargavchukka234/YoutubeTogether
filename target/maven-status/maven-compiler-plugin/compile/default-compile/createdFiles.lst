@@ -1,9 +1,15 @@
 com/distri/mdlware/websocket/WebSocketConfig.class
+com/distri/mdlware/websocket/TimingBroadcastEvent.class
 com/distri/mdlware/dto/NewClientDTO.class
+com/distri/mdlware/websocket/ScheduledTasks.class
 com/distri/mdlware/websocket/EventController.class
 com/distri/mdlware/Application.class
 com/distri/mdlware/websocket/Event.class
 com/distri/mdlware/redis/pubsub/RedisMessageListener.class
+com/distri/mdlware/sync/SyncManager.class
 com/distri/mdlware/service/VirtualRoomService.class
-com/distri/mdlware/redis/RedisDAO.class
-com/distri/mdlware/redis/pubsub/RedisPubSubConfig.class
+com/distri/mdlware/dto/RedisPubSubDTO.class
+com/distri/mdlware/exception/InvalidFormatException.class
+com/distri/mdlware/websocket/TimingEvent.class
+com/distri/mdlware/cache/RoomClientCache.class
+com/distri/mdlware/AppConfig.class

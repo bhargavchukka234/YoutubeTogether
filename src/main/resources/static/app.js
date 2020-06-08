@@ -59,7 +59,7 @@ function joinRoom(room) {
             'clientID': 'randomID', 'roomName': curr_room, 'streamPosition': temp,
             'positionSnapshotTime' : Date.now()
         }, 50000))
-    })
+    }, 10000)
 }
 
 

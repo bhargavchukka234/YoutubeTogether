@@ -1,5 +1,6 @@
 package com.distri.mdlware.websocket;
 
+import com.distri.mdlware.cache.RoomClientCache;
 import com.distri.mdlware.dto.RedisPubSubDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import uci.middleware.project.dao.ClientDAO;
 import uci.middleware.project.dao.RoomDAO;
 import uci.middleware.project.dto.RoomClient;
+
+import java.util.Map;
 
 import static uci.middleware.project.utils.Constants.VIDEO_STATUS;
 import static uci.middleware.project.utils.Constants.VIDEO_URL;
@@ -38,6 +41,9 @@ public class EventController {
 
     @Autowired
     private ChannelTopic channelTopic;
+
+    @Autowired
+    private RoomClientCache roomClientCache;
 
 //	@MessageMapping("/hello")
 //	@SendTo("/topic/greetings")
@@ -76,10 +82,13 @@ public class EventController {
         if (event.getName().equals("videoUrlUpdate")) {
             roomDAO.updateRoom(room, VIDEO_URL, event.getValue());
         } else {
-            roomDAO.updateRoom(room, VIDEO_STATUS, event.getName());
+
+            roomDAO.updateRoomVideoStatus(room, event.getName());
         }
         this.template.convertAndSend("/topic/" + room, event);
+
         ObjectMapper jsonMapper = new ObjectMapper();
+
         //Converting the Object to JSONString
         String jsonString = jsonMapper.writeValueAsString(new RedisPubSubDTO("", room, event));
         redisTemplate.convertAndSend(channelTopic.getTopic(), jsonString);
@@ -92,6 +101,8 @@ public class EventController {
 		System.out.println("timing is " + event.getStreamPosition());
         System.out.println("timing taken at " + event.getPositionSnapshotTime());
 
-		clientDAO.updateRoomClient(event.roomName, event.clientID, new RoomClient(Float.parseFloat(event.streamPosition), Long.parseLong(event.positionSnapshotTime)));
+        roomClientCache.addRoomClientId(event.getRoomName(), event.getClientID());
+		clientDAO.updateRoomClient(event.getRoomName(), event.getClientID(),
+                new RoomClient(Float.parseFloat(event.getStreamPosition()), Long.parseLong(event.getPositionSnapshotTime())));
 	}
 }
