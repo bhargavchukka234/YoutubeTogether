@@ -38,6 +38,28 @@ function joinRoom(room) {
             function (data, status, jqXHR) {// success callback
                 $('p').append('status: ' + status + ', data: ' + data);
                 clientID = data.clientID
+                if (data.room.videoID == "") {
+                    data.room.videoID = vidId
+                }
+                if (data.room.videoPosition) {
+                    vid_pos = data.room.videoPosition + (parseFloat(Date.now()) - data.room.videoPositionUpdateTimestamp) / 1000
+
+                } else {
+                    vid_pos = 0
+                }
+                player.cueVideoById(data.room.videoID, vid_pos, "large");
+                vis = true
+                if (data.room.videoStatus == "play") {
+                    player.playVideo();
+                    // stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+                    //     'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+                    //     'positionSnapshotTime': Date.now()
+                    // }))
+                }
+                else if (data.room.videoStatus == "pause") {
+                    player.pauseVideo();
+                }
+
                 //get room information and start video from received ideal position
             });
 
@@ -50,11 +72,12 @@ function joinRoom(room) {
                 console.log("Message received to room: " + room)
                 event = JSON.parse(greeting.body)
                 if (event.name == "play") {
+                    player.playVideo();
+
                     stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
                         'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
                         'positionSnapshotTime': Date.now()
                     }))
-                    player.playVideo();
                 }
                 else if (event.name == "pause") {
                     player.pauseVideo();
@@ -116,6 +139,10 @@ function cueVideoFromURL(url) {
     ours = true
     sendEvent("cue", video_id)
 }
+
+// function cueVideoFromID(videoID) {
+//     player.cueVideoById(video_id, 0, "large");
+// }
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
