@@ -38,4 +38,14 @@ public class TimingEvent {
 	public void setPositionSnapshotTime(String positionSnapshotTime) {
 		this.positionSnapshotTime = positionSnapshotTime;
 	}
+
+	@Override
+	public String toString() {
+		return "TimingEvent{" +
+				"clientID='" + clientID + '\'' +
+				", roomName='" + roomName + '\'' +
+				", streamPosition='" + streamPosition + '\'' +
+				", positionSnapshotTime='" + positionSnapshotTime + '\'' +
+				'}';
+	}
 }

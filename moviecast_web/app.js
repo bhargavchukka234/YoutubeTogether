@@ -37,7 +37,8 @@ function joinRoom(room) {
             { myData: 'This is my data.' }, // data to be submit
             function (data, status, jqXHR) {// success callback
                 $('p').append('status: ' + status + ', data: ' + data);
-                clientID = data
+                clientID = data.clientID
+                //get room information and start video from received ideal position
             });
 
         // const userAction = async () => {
@@ -74,7 +75,9 @@ function joinRoom(room) {
                 } else if (event.name == "buffering") {
                     player.seekTo(event.value, true);
                 } else if (event.name == "idealPosition") {
-                    player.seekTo(event.videoPosition + (Date.now() - event.videoPositionUpdateTimeStamp) / 1000, true)
+                    streamPosition = event.videoPosition + (parseFloat(Date.now()) - event.videoPositionUpdateTimestamp) / 1000;
+                    if (Math.abs(player.getCurrentTime() - streamPosition) > 0.01)
+                        player.seekTo(streamPosition, true);
                 }
                 else {
                     player.cueVideoById(event.value, 0, "large");
@@ -83,13 +86,13 @@ function joinRoom(room) {
             ours = false;
         });
     });
-    // var interval = setInterval(function () {
-    //     let temp = player.getCurrentTime()
-    //     stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-    //         'clientID': clientID, 'roomName': curr_room, 'streamPosition': temp,
-    //         'positionSnapshotTime': Date.now()
-    //     }, 60000))
-    // })
+    var interval = setInterval(function () {
+
+        stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+            'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+            'positionSnapshotTime': Date.now()
+        }, 60000))
+    }, 10000)
 }
 
 
