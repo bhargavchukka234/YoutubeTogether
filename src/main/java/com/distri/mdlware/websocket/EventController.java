@@ -1,5 +1,6 @@
 package com.distri.mdlware.websocket;
 
+import com.distri.mdlware.cache.RoomClientCache;
 import com.distri.mdlware.dto.RedisPubSubDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import uci.middleware.project.dao.ClientDAO;
 import uci.middleware.project.dao.RoomDAO;
 import uci.middleware.project.dto.RoomClient;
+
+import java.util.Map;
 
 import static uci.middleware.project.utils.Constants.VIDEO_STATUS;
 import static uci.middleware.project.utils.Constants.VIDEO_URL;
@@ -38,6 +41,9 @@ public class EventController {
 
     @Autowired
     private ChannelTopic channelTopic;
+
+    @Autowired
+    private RoomClientCache roomClientCache;
 
 //	@MessageMapping("/hello")
 //	@SendTo("/topic/greetings")
@@ -70,15 +76,19 @@ public class EventController {
 
     @MessageMapping("/youtube/{room}")
     public void youtubeControl(@DestinationVariable String room, Event event) throws Exception {
-        System.out.println("Entered youtube control method");
-        System.out.println("message name is " + event.getName());
-        System.out.println("current room is " + room);
+//        System.out.println("Entered youtube control method");
+//        System.out.println("message name is " + event.getName());
+//        System.out.println("current room is " + room);
         if (event.getName().equals("videoUrlUpdate")) {
             roomDAO.updateRoom(room, VIDEO_URL, event.getValue());
-        } else {
-            roomDAO.updateRoom(room, VIDEO_STATUS, event.getName());
+        } else if(event.getName().equals("reconnectEvent")){
+
+            roomClientCache.addRoomClientId(room, event.getValue());
         }
-        this.template.convertAndSend("/topic/" + room, event);
+        else {
+
+            roomDAO.updateRoomVideoStatus(room, event.getName());
+        }
         ObjectMapper jsonMapper = new ObjectMapper();
         //Converting the Object to JSONString
         String jsonString = jsonMapper.writeValueAsString(new RedisPubSubDTO("", room, event));
@@ -87,11 +97,9 @@ public class EventController {
 
 	@MessageMapping("/youtube/timing_event")
 	public void timingEvent(TimingEvent event) throws Exception {
-		System.out.println("current client is " + event.clientID);
-		System.out.println("current room is " + event.getRoomName());
-		System.out.println("timing is " + event.getStreamPosition());
-        System.out.println("timing taken at " + event.getPositionSnapshotTime());
+		System.out.println("Received timing event : " + event.toString());
 
-		clientDAO.updateRoomClient(event.roomName, event.clientID, new RoomClient(Float.parseFloat(event.streamPosition), Long.parseLong(event.positionSnapshotTime)));
+		clientDAO.updateRoomClient(event.getRoomName(), event.getClientID(),
+                new RoomClient(Float.parseFloat(event.getStreamPosition()), Long.parseLong(event.getPositionSnapshotTime())));
 	}
 }

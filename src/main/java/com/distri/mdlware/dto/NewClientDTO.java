@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class NewClientDTO {
 
-    private String clientId;
+    private String clientID;
 
     private Room room;
 
@@ -14,18 +14,18 @@ public class NewClientDTO {
 
     }
 
-    public NewClientDTO(String clientId, Room room){
+    public NewClientDTO(String clientID, Room room){
 
-        this.clientId = clientId;
+        this.clientID = clientID;
         this.room = room;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getClientID() {
+        return clientID;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setClientID(String clientID) {
+        this.clientID = clientID;
     }
 
     public Room getRoom() {
@@ -41,19 +41,19 @@ public class NewClientDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NewClientDTO that = (NewClientDTO) o;
-        return clientId.equals(that.clientId) &&
+        return clientID.equals(that.clientID) &&
                 Objects.equals(room, that.room);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, room);
+        return Objects.hash(clientID, room);
     }
 
     @Override
     public String toString() {
         return "NewClientDTO{" +
-                "clientId='" + clientId + '\'' +
+                "clientId='" + clientID + '\'' +
                 ", room=" + room +
                 '}';
     }
