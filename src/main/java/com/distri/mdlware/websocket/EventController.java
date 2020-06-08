@@ -79,7 +79,7 @@ public class EventController {
 //        System.out.println("Entered youtube control method");
 //        System.out.println("message name is " + event.getName());
 //        System.out.println("current room is " + room);
-        if (event.getName().equals("videoUrlUpdate")) {
+        if (event.getName().equals("cue")) {
             roomDAO.updateRoom(room, VIDEO_URL, event.getValue());
         } else if(event.getName().equals("reconnectEvent")){
 
