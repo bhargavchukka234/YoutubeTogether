@@ -81,7 +81,11 @@ public class EventController {
         System.out.println("current room is " + room);
         if (event.getName().equals("videoUrlUpdate")) {
             roomDAO.updateRoom(room, VIDEO_URL, event.getValue());
-        } else {
+        } else if(event.getName().equals("reconnectEvent")){
+
+            roomClientCache.addRoomClientId(room, event.getValue());
+        }
+        else {
 
             roomDAO.updateRoomVideoStatus(room, event.getName());
         }
@@ -101,7 +105,6 @@ public class EventController {
 		System.out.println("timing is " + event.getStreamPosition());
         System.out.println("timing taken at " + event.getPositionSnapshotTime());
 
-        roomClientCache.addRoomClientId(event.getRoomName(), event.getClientID());
 		clientDAO.updateRoomClient(event.getRoomName(), event.getClientID(),
                 new RoomClient(Float.parseFloat(event.getStreamPosition()), Long.parseLong(event.getPositionSnapshotTime())));
 	}

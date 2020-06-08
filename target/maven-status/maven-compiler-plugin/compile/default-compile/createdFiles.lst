@@ -1,7 +1,7 @@
 com/distri/mdlware/websocket/WebSocketConfig.class
-com/distri/mdlware/websocket/TimingBroadcastEvent.class
 com/distri/mdlware/dto/NewClientDTO.class
 com/distri/mdlware/websocket/ScheduledTasks.class
+com/distri/mdlware/websocket/ReconnectEvent.class
 com/distri/mdlware/websocket/EventController.class
 com/distri/mdlware/Application.class
 com/distri/mdlware/websocket/Event.class
@@ -12,4 +12,6 @@ com/distri/mdlware/dto/RedisPubSubDTO.class
 com/distri/mdlware/exception/InvalidFormatException.class
 com/distri/mdlware/websocket/TimingEvent.class
 com/distri/mdlware/cache/RoomClientCache.class
+com/distri/mdlware/websocket/IdealPosition.class
+com/distri/mdlware/CORSFilter.class
 com/distri/mdlware/AppConfig.class

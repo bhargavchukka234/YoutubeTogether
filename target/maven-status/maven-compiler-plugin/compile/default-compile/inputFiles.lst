@@ -1,10 +1,12 @@
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/service/VirtualRoomService.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/Event.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/sync/SyncManager.java
-/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/TimingBroadcastEvent.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/Application.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/ReconnectEvent.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/WebSocketConfig.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/TimingEvent.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/IdealPosition.java
+/Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/CORSFilter.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/dto/NewClientDTO.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/exception/InvalidFormatException.java
 /Users/bhargav/Documents/spring2020/cs237_middleware/project/MoviCast/src/main/java/com/distri/mdlware/websocket/EventController.java

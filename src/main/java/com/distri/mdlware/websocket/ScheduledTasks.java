@@ -31,7 +31,7 @@ public class ScheduledTasks {
 
     public static final int ROOM_IDEAL_POSITION_UPDATE_TIMEOUT_SECONDS = 60;
 
-    public static final String IDEAL_POSITION_EVENT = "idealPositionEvent";
+    public static final String IDEAL_POSITION= "idealPosition";
 
     @Scheduled(fixedRate = 30000)
     public void scheduleTaskWithFixedRate() {
@@ -78,7 +78,7 @@ public class ScheduledTasks {
 
     private void sendRoomClientsSyncPosition(String roomName, Room room) {
 
-        simpMessagingTemplate.convertAndSend("/topic/" + roomName, new TimingBroadcastEvent(IDEAL_POSITION_EVENT, room.getVideoPosition(), room.getVideoPositionUpdateTimestamp()));
+        simpMessagingTemplate.convertAndSend("/topic/" + roomName, new IdealPosition(IDEAL_POSITION, room.getVideoPosition(), room.getVideoPositionUpdateTimestamp()));
     }
 
 

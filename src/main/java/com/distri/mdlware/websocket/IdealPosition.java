@@ -1,12 +1,12 @@
 package com.distri.mdlware.websocket;
 
-public class TimingBroadcastEvent {
+public class IdealPosition {
 
     private String eventName;
     private Float videoPosition;
     private Long videoPositionUpdateTimestamp;
 
-    public TimingBroadcastEvent(String eventName, Float videoPosition, Long videoPositionUpdateTimestamp){
+    public IdealPosition(String eventName, Float videoPosition, Long videoPositionUpdateTimestamp){
         this.videoPosition = videoPosition;
          this.videoPositionUpdateTimestamp = videoPositionUpdateTimestamp;
     }

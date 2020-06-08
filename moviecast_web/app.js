@@ -1,4 +1,14 @@
+{/* <script type="module">
+
+    import $ from "jquery";
+    import SockJS from "sockjs-client"
+    import Stomp from "@stomp/stompjs"
+    import 'bootstrap/dist/css/bootstrap.min.css';
+
+    import btn from './helper'
+</script> */}
 var stompClient = null;
+var clientID = ''
 
 // This code loads the IFrame Player API code asynchronously. From YouTube API webpage.
 var tag = document.createElement('script');
@@ -23,15 +33,35 @@ function onYouTubeIframeAPIReady() {
 }
 
 
-
 function joinRoom(room) {
     //client makes http POST request to the sync manager to register the room and receives the unique client ID in the same call
     //If the room already exists, client should be added to the existing room in the redis
     //else new room should be created and this client should be added to the room 
     curr_room = room
-    var socket = new SockJS('/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
+    var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
+        $.post('http://localhost:8082/create/room/' + curr_room,   // url
+            { myData: 'This is my data.' }, // data to be submit
+            function (data, status, jqXHR) {// success callback
+                $('p').append('status: ' + status + ', data: ' + data);
+                clientID = data
+            });
+
+        // const userAction = async () => {
+        //     const response = await fetch('create/room/' + curr_room, {
+        //         method: 'POST',
+        //         // body: myBody, // string or object
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        //     const myJson = await response.json(); //extract JSON from the http response
+        //     // do something with myJson
+        // }
+
+        // userAction()
+
         setConnected(true);
         console.log('Connected: ' + frame)
 
@@ -65,6 +95,7 @@ function joinRoom(room) {
 
 function onPlayerStateChange(event) {
     // console.log(event);
+    console.log("Client ID is " + clientID)
     ours = true
     switch (event.data) {
         case YT.PlayerState.PLAYING:

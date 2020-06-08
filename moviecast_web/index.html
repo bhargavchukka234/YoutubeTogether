@@ -3,12 +3,27 @@
 
 <head>
     <title>Hello WebSocket</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="/main.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="/node_modules/stomp-websocket/lib/stomp.min.js"></script>
     <script src="/app.js"></script>
+
+
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+
+    <!-- <script type="module">
+
+        // import $ from "jquery";
+        import $ from "/node_modules/jquery/dist/jquery.js"
+
+        import SockJS from "/node_modules/sockjs/sockjs.js"
+        import Stomp from "/node_modules/stomp-websocket/stompjs"
+        import 'bootstrap/dist/css/bootstrap.min.css';
+
+        import btn from './helper'
+    </script> -->
 </head>
 
 <body>
