@@ -28,7 +28,7 @@ function joinRoom(room) {
     //If the room already exists, client should be added to the existing room in the redis
     //else new room should be created and this client should be added to the room 
     curr_room = room
-    var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
+    var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
     // var socket = new SockJS('http://e6e3257595be.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
@@ -114,9 +114,11 @@ function onPlayerStateChange(event) {
         ours = true
         switch (event.data) {
             case YT.PlayerState.PLAYING:
+                console.log("sending play event")
                 sendEvent("play", '')
                 break;
             case YT.PlayerState.PAUSED:
+                console.log("sending play event")
                 sendEvent("pause", '')
                 break;
             case YT.PlayerState.BUFFERING: // If they seeked, dont send this.
