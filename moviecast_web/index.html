@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Hello WebSocket</title>
+    <title>Movicast</title>
     <!-- <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="/main.css" rel="stylesheet">
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
@@ -10,21 +10,60 @@
     <script src="/node_modules/stomp-websocket/lib/stomp.min.js"></script>
     <script src="/app.js"></script>
 
-
-    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
-
-    <!-- <script type="module">
-
-        // import $ from "jquery";
-        import $ from "/node_modules/jquery/dist/jquery.js"
-
-        import SockJS from "/node_modules/sockjs/sockjs.js"
-        import Stomp from "/node_modules/stomp-websocket/stompjs"
-        import 'bootstrap/dist/css/bootstrap.min.css';
-
-        import btn from './helper'
-    </script> -->
 </head>
+
+<style>
+    input[type=text] {
+        /* width: 100%; */
+        padding: 12px 20px;
+        margin: 8px 5px;
+        box-sizing: border-box;
+    }
+
+    .button {
+        background-color: darkgrey;
+        /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        width: 170px
+    }
+
+    .button:hover {
+        background-color: grey;
+        color: white;
+    }
+
+
+    .button2:hover {
+        background-color: #0d7396;
+        color: white;
+
+    }
+
+    .button5:hover {
+        background-color: rgb(224, 91, 39);
+        color: white;
+    }
+
+    .button2 {
+        background-color: #008CBA;
+    }
+
+
+    /* Gray */
+    .button5 {
+        background-color: lightsalmon;
+    }
+
+    /* Black */
+</style>
 
 <body>
     <noscript>
@@ -69,7 +108,8 @@
         </div>
     </div> -->
     <div class="bodyDiv">
-        <h1 style="text-align: center">MoviCast</h1>
+        <h1 style="text-align: center; color:crimson ;padding: 5px 2px; background-color:linen;">MoviCast - Watch
+            Youtube videos together!</h1>
         <div id="player"></div>
         <div style="float: left; width: 50%;">
             <div id="video-chat" hidden="true" style="margin-bottom: 10px;">
@@ -80,28 +120,20 @@
             <form name="loginForm" id="login" action="#"
                 onsubmit="return joinRoom(document.getElementById('username').value);">
                 <input type="text" name="username" id="username" placeholder="Enter an existing room name" />
-                <input type="submit" name="login_submit" value="Join room">
+                <input type="submit" class="button button2" name="login_submit" value="Join room">
             </form>
 
             <form name="callForm" id="call" action="#" onsubmit="return errWrap(makeCall,this);">
                 <input type="text" name="number" id="call" placeholder="Enter new room name" />
-                <input type="submit" value="Create room">
+                <input type="submit" class="button" value="Create room">
             </form>
 
             <form name="cueForm" id="cue" action="#"
                 onsubmit="return cueVideoFromURL(document.getElementById('url').value);">
                 <input type="text" name="url" id="url" placeholder="Enter YouTube Video URL" />
-                <input type="submit" value="Queue Video">
+                <input type="submit" class="button button5" value="Change Video">
             </form>
 
-
-            <!-- <div class="ptext">
-                <p><b>To Use:</b></p>
-                <p>Enter a username and click Log in button.<br>If input turns green you are ready to receive/place a
-                    call.</p>
-                <p>In a separate browser window, log in with a different username.<br>Place a call to the first.</p>
-                <p>Now you can begin to queue videos.</p>
-            </div> -->
         </div>
     </div>
 </body>
