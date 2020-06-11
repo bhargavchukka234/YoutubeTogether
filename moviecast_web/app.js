@@ -51,13 +51,15 @@ function joinRoom(room) {
                         vid_pos = 0
                     }
                     player.cueVideoById(data.room.videoID, vid_pos, "large");
+                    // player.seekTo(vid_pos, true);
+
                     vis = true
                     if (data.room.videoStatus == "play") {
                         player.playVideo();
-                        stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-                            'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
-                            'positionSnapshotTime': Date.now()
-                        }))
+                        // stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+                        //     'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+                        //     'positionSnapshotTime': Date.now()
+                        // }))
                     }
                     else if (data.room.videoStatus == "pause") {
                         player.pauseVideo();
@@ -142,7 +144,8 @@ function onPlayerStateChange(event) {
                 sendEvent("pause", '')
                 break;
             case YT.PlayerState.BUFFERING: // If they seeked, dont send this.
-                sendEvent("buffering", event.target.playerInfo.currentTime)
+                if (event.target.playerInfo.currentTime > 2)
+                    sendEvent("buffering", event.target.playerInfo.currentTime)
         }
     } else {
         ours = false;
