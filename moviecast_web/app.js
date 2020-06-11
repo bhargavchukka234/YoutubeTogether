@@ -1,6 +1,6 @@
 var stompClient = null;
 var clientID = ''
-
+var error = false;
 // This code loads the IFrame Player API code asynchronously. From YouTube API webpage.
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
@@ -28,41 +28,45 @@ function joinRoom(room) {
     //If the room already exists, client should be added to the existing room in the redis
     //else new room should be created and this client should be added to the room 
     curr_room = room
-    var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
-    // var socket = new SockJS('http://e6e3257595be.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
+    // var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
+    var socket = new SockJS('http://6f78d5c4bbaa.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        $.post('http://localhost:8082/create/room/' + curr_room,   // url
-            // $.post('http://e6e3257595be.ngrok.io/create/room/' + curr_room,   // url
-            { myData: 'This is my data.' }, // data to be submit
-            function (data, status, jqXHR) {// success callback
-                $('p').append('status: ' + status + ', data: ' + data);
-                clientID = data.clientID
-                if (data.room.videoID == "") {
-                    data.room.videoID = vidId
-                }
-                if (data.room.videoPosition) {
-                    vid_pos = data.room.videoPosition + (parseFloat(Date.now()) - data.room.videoPositionUpdateTimestamp) / 1000
+        // $.post('http://localhost:8082/create/room/' + curr_room,   // url
+        if (!error) {
+            $.post('http://6f78d5c4bbaa.ngrok.io/create/room/' + curr_room,   // url
+                { myData: 'This is my data.' }, // data to be submit
+                function (data, status, jqXHR) {// success callback
+                    $('p').append('status: ' + status + ', data: ' + data);
+                    clientID = data.clientID
+                    if (data.room.videoID == "") {
+                        data.room.videoID = vidId
+                    }
+                    if (data.room.videoPosition) {
+                        vid_pos = data.room.videoPosition + (parseFloat(Date.now()) - data.room.videoPositionUpdateTimestamp) / 1000
 
-                } else {
-                    vid_pos = 0
-                }
-                player.cueVideoById(data.room.videoID, vid_pos, "large");
-                vis = true
-                if (data.room.videoStatus == "play") {
-                    player.playVideo();
-                    // stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-                    //     'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
-                    //     'positionSnapshotTime': Date.now()
-                    // }))
-                }
-                else if (data.room.videoStatus == "pause") {
-                    player.pauseVideo();
-                }
+                    } else {
+                        vid_pos = 0
+                    }
+                    player.cueVideoById(data.room.videoID, vid_pos, "large");
+                    vis = true
+                    if (data.room.videoStatus == "play") {
+                        player.playVideo();
+                        // stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+                        //     'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+                        //     'positionSnapshotTime': Date.now()
+                        // }))
+                    }
+                    else if (data.room.videoStatus == "pause") {
+                        player.pauseVideo();
+                    }
 
-                //get room information and start video from received ideal position
-            });
-
+                    //get room information and start video from received ideal position
+                });
+        } else {
+            stompClient.send("/app/youtube/" + curr_room, {}, JSON.stringify({ 'name': 'reconnectEvent', 'value': clientID }));
+            error = false;
+        }
         setConnected(true);
         console.log('Connected: ' + frame)
 
@@ -96,6 +100,11 @@ function joinRoom(room) {
 
             }
         });
+    }, function (message) {
+        console.log("STOMP CLIENT DISCONNECTED")
+        console.log("The message is " + message)
+        error = true
+        handleError()
     });
     var interval = setInterval(function () {
 
@@ -104,6 +113,10 @@ function joinRoom(room) {
             'positionSnapshotTime': Date.now()
         }))
     }, 10000)
+}
+
+function handleError() {
+    joinRoom(curr_room)
 }
 
 
