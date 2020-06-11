@@ -36,7 +36,9 @@ public class VirtualRoomService {
     @PostMapping("/create/room/{roomName}")
     public ResponseEntity<NewClientDTO> createRoom(@PathVariable String roomName) {
 
-        Room room = roomDAO.createRoom(roomName, new Room());
+        Room room = new Room();
+        room.setvideoID("xHcPhdZBngw");
+        room = roomDAO.createRoom(roomName, room);
         syncManager.addRoomToSyncManager(roomName);
         String clientId = UUID.randomUUID().toString();
         roomDAO.addClientToRoom(roomName, clientId);

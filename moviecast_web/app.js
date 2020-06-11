@@ -28,12 +28,12 @@ function joinRoom(room) {
     //If the room already exists, client should be added to the existing room in the redis
     //else new room should be created and this client should be added to the room 
     curr_room = room
-    var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
-    // var socket = new SockJS('http://e6e3257595be.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
+    //var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
+    var socket = new SockJS('http://eb6519bc8348.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        $.post('http://localhost:8082/create/room/' + curr_room,   // url
-            // $.post('http://e6e3257595be.ngrok.io/create/room/' + curr_room,   // url
+        //$.post('http://localhost:8082/create/room/' + curr_room,   // url
+        $.post('http://eb6519bc8348.ngrok.io/create/room/' + curr_room,   // url
             { myData: 'This is my data.' }, // data to be submit
             function (data, status, jqXHR) {// success callback
                 $('p').append('status: ' + status + ', data: ' + data);
