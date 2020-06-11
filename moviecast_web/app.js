@@ -28,13 +28,15 @@ function joinRoom(room) {
     //If the room already exists, client should be added to the existing room in the redis
     //else new room should be created and this client should be added to the room 
     curr_room = room
-    // var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
-    var socket = new SockJS('http://6f78d5c4bbaa.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
+    var socket = new SockJS('http://localhost:8082/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer
+    // var socket = new SockJS('http://7005f8138314.ngrok.io/gs-guide-websocket'); //this websocket connection has to go through nginx load balancer 
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         // $.post('http://localhost:8082/create/room/' + curr_room,   // url
         if (!error) {
-            $.post('http://6f78d5c4bbaa.ngrok.io/create/room/' + curr_room,   // url
+            $.post('http://localhost:8082/create/room/' + curr_room,   // url
+
+                // $.post('http://7005f8138314.ngrok.io/create/room/' + curr_room,   // url
                 { myData: 'This is my data.' }, // data to be submit
                 function (data, status, jqXHR) {// success callback
                     $('p').append('status: ' + status + ', data: ' + data);
@@ -44,23 +46,29 @@ function joinRoom(room) {
                     }
                     if (data.room.videoPosition) {
                         vid_pos = data.room.videoPosition + (parseFloat(Date.now()) - data.room.videoPositionUpdateTimestamp) / 1000
-
                     } else {
+                        console.log("VIDEO POSITION MOVED TO 0")
                         vid_pos = 0
                     }
                     player.cueVideoById(data.room.videoID, vid_pos, "large");
                     vis = true
                     if (data.room.videoStatus == "play") {
                         player.playVideo();
-                        // stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-                        //     'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
-                        //     'positionSnapshotTime': Date.now()
-                        // }))
+                        stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+                            'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+                            'positionSnapshotTime': Date.now()
+                        }))
                     }
                     else if (data.room.videoStatus == "pause") {
                         player.pauseVideo();
                     }
+                    var interval = setInterval(function () {
 
+                        stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+                            'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+                            'positionSnapshotTime': Date.now()
+                        }))
+                    }, 10000)
                     //get room information and start video from received ideal position
                 });
         } else {
@@ -77,7 +85,6 @@ function joinRoom(room) {
                 event = JSON.parse(greeting.body)
                 if (event.name == "play") {
                     player.playVideo();
-
                     stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
                         'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
                         'positionSnapshotTime': Date.now()
@@ -106,13 +113,13 @@ function joinRoom(room) {
         error = true
         handleError()
     });
-    var interval = setInterval(function () {
+    // var interval = setInterval(function () {
 
-        stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
-            'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
-            'positionSnapshotTime': Date.now()
-        }))
-    }, 10000)
+    //     stompClient.send("/app/youtube/timing_event", {}, JSON.stringify({
+    //         'clientID': clientID, 'roomName': curr_room, 'streamPosition': player.getCurrentTime(),
+    //         'positionSnapshotTime': Date.now()
+    //     }))
+    // }, 10000)
 }
 
 function handleError() {
