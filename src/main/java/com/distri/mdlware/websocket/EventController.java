@@ -80,7 +80,8 @@ public class EventController {
 //        System.out.println("message name is " + event.getName());
 //        System.out.println("current room is " + room);
         if (event.getName().equals("cue")) {
-            roomDAO.updateRoom(room, VIDEO_URL, event.getValue());
+            roomDAO.updateRoomVideoUrl(room, event.getValue());
+
         } else if(event.getName().equals("reconnectEvent")){
 
             roomClientCache.addRoomClientId(room, event.getValue());
